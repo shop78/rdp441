@@ -41,6 +41,7 @@ jobs:
         env:
           RDP_USERNAME: ${{ secrets.RDP USERNAME }}
           RDP_PASSWORD: ${{ secrets.RDP PASSWORD }}
+          # Use secrets for sensitive information
 
       - name: Print environment variables
         run: |
