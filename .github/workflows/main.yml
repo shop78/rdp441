@@ -1,0 +1,54 @@
+name: RDP Deployment Workflow
+
+on:
+  push:
+    branches:
+      - main  # Trigger this workflow on push to the main branch
+
+jobs:
+  deploy:
+    runs-on: windows-latest  # Use the latest Windows runner
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Fetch all history for all branches
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '14'  # Specify the Node.js version needed
+
+      - name: Install dependencies
+        run: npm install
+        # Install dependencies listed in package.json
+
+      - name: Build application
+        run: |
+          npm run build
+          # Example build command; replace with your actual build command
+
+      - name: List build directory
+        run: |
+          dir  # Windows command to list directory contents for debugging
+
+      - name: Deploy application
+        run: |
+          echo "Deploying application..."
+          # Example deploy command; replace with your actual deployment logic
+          curl -X POST -d "version=$(git rev-parse --short HEAD)" http://yourserver/deploy
+        env:
+          RDP_USERNAME: ${{ secrets.RDP USERNAME }}
+          RDP_PASSWORD: ${{ secrets.RDP PASSWORD }}
+
+      - name: Print environment variables
+        run: |
+          echo "Node version: $(node -v)"
+          echo "Git SHA: $(git rev-parse --short HEAD)"
+          # Print environment details for debugging
+
+      - name: Run RDP-related tasks (Optional)
+        run: |
+          echo "Running RDP-related tasks..."
+          # Replace with your actual RDP-related commands or scripts
